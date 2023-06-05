@@ -7,7 +7,8 @@ import {
     IModel
 } from "siyuan";
 import "./index.scss";
-import { i18n } from "./utils"; 
+import { i18n, setI18n } from "./utils"; 
+import { showHistory } from "./api";
 
 
 const STORAGE_NAME = "menu-config";
@@ -20,7 +21,7 @@ export default class PluginSample extends Plugin {
 
     async onload() {
         this.data[STORAGE_NAME] = {readonlyText: "Readonly"};
-
+        setI18n(this.i18n)
         console.log("loading plugin-sample", this.i18n);
 
         const frontEnd = getFrontend();
@@ -57,10 +58,12 @@ export default class PluginSample extends Plugin {
         });
         if (ids.length===0 || ids.length > 1) return;
         console.log(ids[0], detail.protyle.block.parentID)
+        let docID = detail.protyle.block.parentID
+        let blockID = ids[0]
         detail.menu.addItem({
             icon: "iconFace",
             label: i18n.blockHistory,
-            click:this.showDialog
+            click:()=>{showHistory(docID, blockID)}
         });
     }
 
