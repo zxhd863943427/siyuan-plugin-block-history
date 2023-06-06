@@ -101,7 +101,7 @@ export async function showHistory(docID:string, blockID:string){
     let tmp =  await getBlockHistory(docID,blockID)
     let historyContent =  `
     <div class="protyle fn__flex-1">
-        <div class="protyle-content" style="user-select: text">
+        <div class="protyle-content" style="user-select: text;max-height: 40em;">
             <div class="protyle-wysiwyg protyle-wysiwyg--attr" >
             <div class="backlinkList fn__flex-1"><ul class="b3-list b3-list--background">
             
