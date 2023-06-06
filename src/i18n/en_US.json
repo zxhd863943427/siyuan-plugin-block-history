@@ -10,6 +10,7 @@
     "name": "SiYuan",
     "showDialog": "block History",
     "blockHistory":"show block History",
+    "loadingHistory":"Querying block history, please wait...",
     "hello": {
         "makesure": "Before using this template, please read the <a href=\"https://github.com/siyuan-note/plugin-sample\">offical sample</a>, make sure that you've known about the pipeline for plugin developing."
     }

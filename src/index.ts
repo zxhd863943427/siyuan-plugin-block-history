@@ -32,7 +32,12 @@ export default class PluginSample extends Plugin {
 </symbol>
 <symbol id="iconSaving" viewBox="0 0 32 32">
 <path d="M20 13.333c0-0.733 0.6-1.333 1.333-1.333s1.333 0.6 1.333 1.333c0 0.733-0.6 1.333-1.333 1.333s-1.333-0.6-1.333-1.333zM10.667 12h6.667v-2.667h-6.667v2.667zM29.333 10v9.293l-3.76 1.253-2.24 7.453h-7.333v-2.667h-2.667v2.667h-7.333c0 0-3.333-11.28-3.333-15.333s3.28-7.333 7.333-7.333h6.667c1.213-1.613 3.147-2.667 5.333-2.667 1.107 0 2 0.893 2 2 0 0.28-0.053 0.533-0.16 0.773-0.187 0.453-0.347 0.973-0.427 1.533l3.027 3.027h2.893zM26.667 12.667h-1.333l-4.667-4.667c0-0.867 0.12-1.72 0.347-2.547-1.293 0.333-2.347 1.293-2.787 2.547h-8.227c-2.573 0-4.667 2.093-4.667 4.667 0 2.507 1.627 8.867 2.68 12.667h2.653v-2.667h8v2.667h2.68l2.067-6.867 3.253-1.093v-4.707z"></path>
-</symbol>`);
+</symbol>
+<symbol id="showHistory" lass="icon icon-tabler icon-tabler-clock-edit" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+<path d="M21 12a9 9 0 1 0 -9.972 8.948c.32 .034 .644 .052 .972 .052"></path>
+<path d="M12 7v5l2 2"></path>
+<path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z"></path></symbol>`);
         this.eventBus.on("click-blockicon", this.blockIconEvent);
 
         console.log(this.i18n.helloPlugin);
@@ -61,9 +66,11 @@ export default class PluginSample extends Plugin {
         let docID = detail.protyle.block.parentID
         let blockID = ids[0]
         detail.menu.addItem({
-            icon: "iconFace",
+            icon: "showHistory",
             label: i18n.blockHistory,
-            click:()=>{showHistory(docID, blockID)}
+            click:()=>{
+                showMessage(i18n.loadingHistory,2000)
+                showHistory(docID, blockID)}
         });
     }
 
