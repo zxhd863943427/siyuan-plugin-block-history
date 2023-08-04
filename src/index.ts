@@ -4,15 +4,16 @@ import {
     Dialog,
     getFrontend,
     getBackend,
-    IModel
+    IModel,
+    adaptHotkey
 } from "siyuan";
 import "./index.scss";
 import { i18n, setI18n } from "./utils"; 
-import { showHistory } from "./api";
+import { getBlockHistoyDom, showHistory } from "./api";
 
 
 const STORAGE_NAME = "menu-config";
-
+const DOCK_TYPE = "block_history_dock";
 
 export default class PluginSample extends Plugin {
 
@@ -38,7 +39,37 @@ export default class PluginSample extends Plugin {
 <path d="M21 12a9 9 0 1 0 -9.972 8.948c.32 .034 .644 .052 .972 .052"></path>
 <path d="M12 7v5l2 2"></path>
 <path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z"></path></symbol>`);
+    this.addDock({
+        config: {
+            position: "LeftBottom",
+            size: {width: 200, height: 0},
+            icon: "showHistory",
+            title: "show History",
+        },
+        data: {
+            text: "This is my custom dock"
+        },
+        type: DOCK_TYPE,
+        init() {
+            this.element.innerHTML = `<div class="fn__flex-1 fn__flex-column">
+    <div class="block__icons">
+    <div class="block__logo">
+        <svg><use xlink:href="#showHistory"></use></svg>
+        Block History
+    </div>
+    <span class="fn__flex-1 fn__space"></span>
+    <span data-type="min" class="block__icon b3-tooltips b3-tooltips__sw" aria-label="Min ${adaptHotkey("⌘W")}"><svg><use xlink:href="#iconMin"></use></svg></span>
+    </div>
+    <div class="fn__flex-1 plugin-block-hisory__custom-dock">
+    </div>
+    </div>`;
+        },
+        destroy() {
+            console.log("destroy dock:", DOCK_TYPE);
+        }
+    });
         this.eventBus.on("click-blockicon", this.blockIconEvent);
+        this.eventBus.on("click-editorcontent",this.dockEvent)
 
         console.log(this.i18n.helloPlugin);
     }
@@ -54,15 +85,26 @@ export default class PluginSample extends Plugin {
         console.log("onunload");
     }
     that = this
+    private dockEvent({detail}: any){
+        setTimeout(()=>{
+            const dock = document.querySelector(".fn__flex-1:not(.fn__none)>[data-type] .plugin-block-hisory__custom-dock")
+            if(!dock) return;
+            let docID = detail.protyle.block.id
+            let blockID = detail.protyle.breadcrumb.id
 
+            getBlockHistoyDom(docID, blockID,"unset").then(dom => {
+                dock.innerHTML = dom
+            }
+        )},100)
+    } 
     private blockIconEvent({detail}: any) {
         const ids: string[] = [];
-        console.log(detail)
+        // console.log(detail)
         detail.blockElements.forEach((item: HTMLElement) => {
             ids.push(item.getAttribute("data-node-id"));
         });
         if (ids.length===0 || ids.length > 1) return;
-        console.log(ids[0], detail.protyle.block.parentID)
+        // console.log(ids[0], detail.protyle.block.parentID)
         let docID = detail.protyle.block.parentID
         let blockID = ids[0]
         detail.menu.addItem({
