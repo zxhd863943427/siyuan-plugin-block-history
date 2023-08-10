@@ -11,3 +11,5 @@
 ![](img/historyIcon.png)
 
 等待一会即可见到块历史
+
+增加一个dock来快速查看块历史。
